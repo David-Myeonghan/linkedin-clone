@@ -134,6 +134,47 @@ const NavList = styled.li`
     }
 `;
 
+const SignOut = styled.div`
+    position: absolute;
+    top: 45px;
+    background: white;
+    border-radius: 0 0 5px 5px;
+    width: 100px;
+    height: 40px;
+    font-size: 16px;
+    transition-duration: 167ms;
+    text-align: center;
+    display: none;
+`;
+
+const User = styled(NavList)`
+    a > svg {
+        width: 24px;
+        border-radius: 50%;
+    }
+    a > img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+    }
+
+    span {
+        display: flex;
+        align-items: center;
+    }
+
+    &:hover {
+        ${SignOut} {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+        }
+    }
+`;
+const Work = styled(User)`
+    border-left: 1px solid rgba(0, 0, 0, 0.88);
+`;
+
 const Header = (props) => {
     return (
         <Container>
@@ -189,6 +230,31 @@ const Header = (props) => {
                                 <span>Notifications</span>
                             </a>
                         </NavList>
+
+                        <User>
+                            <a>
+                                <img src="/images/svg/user.svg" alt="" />
+                                <span>ME</span>
+                                <img src="/images/svg/down-icon.svg" alt="" />
+                            </a>
+
+                            <SignOut>
+                                <a>Sign Out</a>
+                            </SignOut>
+                        </User>
+                        <Work>
+                            <a href="">
+                                <img src="/images/svg/nav-work.svg" alt="" />
+
+                                <span>
+                                    Work
+                                    <img
+                                        src="/images/svg/down-icon.svg"
+                                        alt=""
+                                    />
+                                </span>
+                            </a>
+                        </Work>
                     </NavListWrap>
                 </Nav>
             </Content>
