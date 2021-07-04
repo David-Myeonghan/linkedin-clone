@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import './Header.style.scss';
+import { connect } from 'react-redux';
+import { signOutAPI } from '../actions';
+import { Redirect } from 'react-router-dom';
 
 const Container = styled.div`
     background-color: white;
@@ -79,8 +82,13 @@ const NavListWrap = styled.ul`
     display: flex;
     flex-wrap: nowrap;
     list-style: none;
+`;
 
-    .active {
+const NavList = styled.li`
+    display: flex;
+    align-items: center;
+
+    &.active {
         span:after {
             content: '';
             transform: scaleX(1);
@@ -93,11 +101,6 @@ const NavListWrap = styled.ul`
             border-color: (0, 0, 0, 0.9);
         }
     }
-`;
-
-const NavList = styled.li`
-    display: flex;
-    align-items: center;
 
     a {
         align-items: center;
@@ -233,12 +236,16 @@ const Header = (props) => {
 
                         <User>
                             <a>
-                                <img src="/images/svg/user.svg" alt="" />
+                                {props.user && props.user.photoURL ? (
+                                    <img src={props.user.photoURL} alt="" />
+                                ) : (
+                                    <img src="/images/svg/user.svg" alt="" />
+                                )}
                                 <span>ME</span>
                                 <img src="/images/svg/down-icon.svg" alt="" />
                             </a>
 
-                            <SignOut>
+                            <SignOut onClick={() => props.signOut()}>
                                 <a>Sign Out</a>
                             </SignOut>
                         </User>
@@ -262,4 +269,14 @@ const Header = (props) => {
     );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        user: state.userState.user,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    signOut: () => dispatch(signOutAPI()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
