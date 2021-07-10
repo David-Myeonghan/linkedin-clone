@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -9,7 +9,8 @@ const Container = styled.div`
 	bottom: 0;
 	z-index: 3;
 	color: black;
-	background-color: rgba(0, 0, 0, 0.6); ;
+	background-color: rgba(0, 0, 0, 0.6);
+	animation: fadeIn 0.3s; // This comes from index.css
 `;
 
 const Content = styled.div`
@@ -159,58 +160,77 @@ const Editor = styled.div`
 
 const PostModal = (props) => {
 	const [editorText, setEditorText] = useState('');
+	const modalRef = useRef(null);
 
 	const reset = (e) => {
 		setEditorText('');
 		props.handleClick(e);
 	};
 
+	useEffect(() => {
+		const pageClickEvent = (e) => {
+			if (modalRef.current !== null && !modalRef.current.contains(e.target)) {
+				reset(e);
+			}
+			console.log(e.target);
+			console.log(e.currentTarget);
+		};
+		if (props.showModal) {
+			window.addEventListener('click', pageClickEvent);
+		}
+
+		return () => {
+			window.removeEventListener('click', pageClickEvent);
+		};
+	}, [props.showModal]);
+
 	return (
 		<>
-			{props.showModal === 'open' && (
-				<Container>
-					<Content>
-						<Header>
-							<h2>Create a post</h2>
-							<button onClick={(e) => reset(e)}>
-								<img src="/images/svg/close-icon.svg" alt="" />
-							</button>
-						</Header>
-						<SharedContent>
-							<UserInfo>
-								<img src="/images/svg/user.svg" alt="" />
-								<span>Name</span>
-							</UserInfo>
-							<Editor>
-								<textarea
-									value={editorText}
-									onChange={(e) => setEditorText(e.target.value)}
-									placeholder="What do you want to talk about?"
-									autoFocus={true}
-								></textarea>
-							</Editor>
-						</SharedContent>
-						<ShareCreation>
-							<AttachAssets>
-								<AssetButton>
-									<img src="/images/svg/photo-icon.svg" alt="" />
-								</AssetButton>
-								<AssetButton>
-									<img src="/images/svg/play-icon.svg" alt="" />
-								</AssetButton>
-							</AttachAssets>
-							<ShareComment>
-								<AssetButton>
-									<img src="/images/svg/comment-icon.svg" alt="" />
-									Anyone
-								</AssetButton>
-							</ShareComment>
+			{/* Conditional rendering here makes modal keep rendering in Main component. So, make condition in outer Main Component */}
+			{/* {props.showModal === 'open' && ( */}
+			<Container>
+				<Content ref={modalRef}>
+					<Header>
+						<h2>Create a post</h2>
+						<button onClick={(e) => reset(e)}>
+							<img src="/images/svg/close-icon.svg" alt="" />
+						</button>
+					</Header>
+					<SharedContent>
+						<UserInfo>
+							<img src="/images/svg/user.svg" alt="" />
+							<span>Name</span>
+						</UserInfo>
+						<Editor>
+							<textarea
+								value={editorText}
+								onChange={(e) => setEditorText(e.target.value)}
+								placeholder="What do you want to talk about?"
+								autoFocus={true}
+							></textarea>
+						</Editor>
+					</SharedContent>
+					<ShareCreation>
+						<AttachAssets>
+							<AssetButton>
+								<img src="/images/svg/photo-icon.svg" alt="" />
+							</AssetButton>
+							<AssetButton>
+								<img src="/images/svg/play-icon.svg" alt="" />
+							</AssetButton>
+						</AttachAssets>
+						<ShareComment>
+							<AssetButton>
+								<img src="/images/svg/comment-icon.svg" alt="" />
+								Anyone
+							</AssetButton>
+						</ShareComment>
 
-							<PostButton>Post</PostButton>
-						</ShareCreation>
-					</Content>
-				</Container>
-			)}
+						<PostButton>Post</PostButton>
+					</ShareCreation>
+				</Content>
+			</Container>
+			{/* )} */}
 		</>
 	);
 };

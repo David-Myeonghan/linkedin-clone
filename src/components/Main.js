@@ -212,9 +212,11 @@ const Main = (props) => {
 
 	const handleClick = (e) => {
 		e.preventDefault();
-		if (e.target !== e.currentTarget) {
-			return;
-		}
+		// This if statement make the modal behave as developer expected to close modal using only close button.
+		// but in postModal, modal can be closed when user's clicking outside of modal, using useEffect.
+		// if (e.target !== e.currentTarget) {
+		// 	return;
+		// }
 
 		switch (showModal) {
 			case 'open':
@@ -222,12 +224,15 @@ const Main = (props) => {
 				break;
 			case 'close':
 				setShowModal('open');
+				// return null;
 				break;
 			default:
 				setShowModal('close');
 				break;
 		}
 	};
+
+	console.log(showModal);
 
 	return (
 		<Container>
@@ -312,7 +317,7 @@ const Main = (props) => {
 					</SocialAction>
 				</Article>
 			</div>
-			<PostModal showModal={showModal} handleClick={handleClick} />
+			{showModal === 'open' && <PostModal showModal={showModal} handleClick={handleClick} />}
 		</Container>
 	);
 };
