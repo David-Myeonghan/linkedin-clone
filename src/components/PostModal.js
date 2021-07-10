@@ -134,11 +134,11 @@ const PostButton = styled.button`
 	min-width: 60px;
 	border-radius: 20px;
 	padding; 0 16px;
-    background: #0a66c2;
-    color: white;
+    background: ${(props) => (props.disabled ? 'rgba(0,0,0,0.8)' : '#0a66c2')};
+    color: ${(props) => (props.disabled ? 'rgba(1,1,1,0.2)' : 'white')};
 
     &:hover {
-        background: #004182;
+        background: ${(props) => (props.disabled ? 'rgba(0,0,0,0.08)' : '#004182')};
     }
 `;
 
@@ -226,7 +226,7 @@ const PostModal = (props) => {
 							</AssetButton>
 						</ShareComment>
 
-						<PostButton>Post</PostButton>
+						<PostButton disabled={!editorText ? true : false}>Post</PostButton>
 					</ShareCreation>
 				</Content>
 			</Container>
